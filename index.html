@@ -94,7 +94,7 @@
     <label style="display:flex;align-items:center;gap:6px;margin-left:auto;font-size:0.85rem;">
       Max income:
       <input id="maxIncome" type="range" min="50000" max="10000000" step="50000" value="500000" style="width:120px;">
-      <span id="maxIncomeLabel">500k</span>
+      <input id="maxIncomeBox" type="number" min="50000" max="10000000" step="50000" value="500000" style="width:80px;padding:3px 6px;border:1px solid #ddd;border-radius:6px;font-size:0.85rem;text-align:right;">
     </label>
   </div>
 
@@ -278,15 +278,17 @@ async function init() {
     Plotly.relayout('chart', { showlegend: legendShown });
   });
 
-  // Max income slider
+  // Max income slider + box (synced)
   const slider = document.getElementById('maxIncome');
-  const sliderLabel = document.getElementById('maxIncomeLabel');
-  const fmtLabel = v => v >= 1000000 ? (v/1000000)+'M' : (v/1000)+'k';
-  slider.addEventListener('input', () => {
-    const max = +slider.value;
-    sliderLabel.textContent = fmtLabel(max);
-    Plotly.relayout('chart', { 'xaxis.range': [0, max] });
-  });
+  const box = document.getElementById('maxIncomeBox');
+  function setMaxIncome(val) {
+    val = Math.max(50000, Math.min(10000000, val));
+    slider.value = val;
+    box.value = val;
+    Plotly.relayout('chart', { 'xaxis.range': [0, val] });
+  }
+  slider.addEventListener('input', () => setMaxIncome(+slider.value));
+  box.addEventListener('change', () => setMaxIncome(+box.value));
 
   // Region filter buttons
   document.querySelectorAll('#regionControls button[data-region]').forEach(btn => {
