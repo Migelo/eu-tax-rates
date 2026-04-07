@@ -53,6 +53,7 @@
     color: #fff;
     border-color: #1a1a2e;
   }
+  #legendToggle { margin-left: auto; }
   .chart-card {
     background: #fff;
     border-radius: 12px;
@@ -89,6 +90,7 @@
     <button data-region="nordic">Nordic</button>
     <button data-region="southern">Southern</button>
     <button data-region="central">Central &amp; Eastern</button>
+    <button id="legendToggle">Legend</button>
   </div>
 
   <div class="chart-card">
@@ -221,6 +223,9 @@ async function init() {
     };
   });
 
+  const isMobile = window.innerWidth < 768;
+  const legendVisible = !isMobile;
+
   const layout = {
     xaxis: {
       title: 'Gross Annual Income (EUR)',
@@ -237,13 +242,13 @@ async function init() {
       range: [0, 75]
     },
     hovermode: 'closest',
-    legend: {
-      orientation: 'v',
-      x: 1.02,
-      y: 1,
-      font: { size: 11 }
-    },
-    margin: { l: 60, r: 180, t: 20, b: 60 },
+    showlegend: legendVisible,
+    legend: isMobile
+      ? { orientation: 'h', x: 0, y: -0.25, font: { size: 10 } }
+      : { orientation: 'v', x: 1.02, y: 1, font: { size: 11 } },
+    margin: isMobile
+      ? { l: 45, r: 10, t: 10, b: 50 }
+      : { l: 60, r: 180, t: 20, b: 60 },
     plot_bgcolor: '#fff',
     paper_bgcolor: '#fff'
   };
@@ -256,6 +261,16 @@ async function init() {
   };
 
   Plotly.newPlot('chart', traces, layout, config);
+
+  // Legend toggle
+  const legendBtn = document.getElementById('legendToggle');
+  let legendShown = legendVisible;
+  if (legendShown) legendBtn.classList.add('active');
+  legendBtn.addEventListener('click', () => {
+    legendShown = !legendShown;
+    legendBtn.classList.toggle('active', legendShown);
+    Plotly.relayout('chart', { showlegend: legendShown });
+  });
 
   // Region filter buttons
   document.querySelectorAll('#regionControls button').forEach(btn => {
