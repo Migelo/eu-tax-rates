@@ -62,6 +62,11 @@
     margin-bottom: 24px;
   }
   #chart { width: 100%; min-height: 600px; }
+  #salaryTable { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  #salaryTable th, #salaryTable td { padding: 6px 12px; text-align: right; border-bottom: 1px solid #eee; }
+  #salaryTable th { font-weight: 600; color: #555; position: sticky; top: 0; background: #fff; }
+  #salaryTable td:first-child, #salaryTable th:first-child { text-align: left; }
+  #salaryTable tbody tr:hover { background: #f5f6f8; }
   .methodology {
     background: #fff;
     border-radius: 12px;
@@ -100,6 +105,25 @@
 
   <div class="chart-card">
     <div id="chart"></div>
+  </div>
+
+  <div class="chart-card" id="tableCard">
+    <h3 style="margin-bottom:12px;font-size:1rem;">Net Salary at <span id="tableIncome">500,000</span> EUR gross</h3>
+    <div style="overflow-x:auto;">
+      <table id="salaryTable">
+        <thead>
+          <tr>
+            <th>Country</th>
+            <th>Gross</th>
+            <th>Income Tax</th>
+            <th>Social Contrib.</th>
+            <th>Net Salary</th>
+            <th>Effective Rate</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="methodology">
@@ -174,35 +198,32 @@ function computeSocialContributions(contribs, grossIncome) {
   return total;
 }
 
-function computeEffectiveRate(country, grossIncome) {
-  if (grossIncome <= 0) return 0;
+function computeBreakdown(country, grossIncome) {
+  if (grossIncome <= 0) return { incomeTax: 0, social: 0, net: 0, effectiveRate: 0 };
 
-  // 1. Social contributions on gross
   const social = computeSocialContributions(country.socialContributions, grossIncome);
 
-  // 2. Taxable income
   let taxableIncome = grossIncome - (country.standardDeduction || 0);
-  if (country.socialContributionsDeductible) {
-    taxableIncome -= social;
-  }
+  if (country.socialContributionsDeductible) taxableIncome -= social;
   taxableIncome = Math.max(0, taxableIncome);
 
-  // 3. Income tax
   let incomeTax = computeProgressiveTax(country.incomeTax.brackets, taxableIncome);
+  if (country.incomeTax.surchargeOnTax) incomeTax *= (1 + country.incomeTax.surchargeOnTax);
 
-  // 4. Surcharge on tax
-  if (country.incomeTax.surchargeOnTax) {
-    incomeTax *= (1 + country.incomeTax.surchargeOnTax);
-  }
-
-  // 5. Surtax brackets (on gross income, separate from income tax)
   let surtax = 0;
-  if (country.incomeTax.surtaxBrackets) {
-    surtax = computeProgressiveTax(country.incomeTax.surtaxBrackets, grossIncome);
-  }
+  if (country.incomeTax.surtaxBrackets) surtax = computeProgressiveTax(country.incomeTax.surtaxBrackets, grossIncome);
 
   const totalTax = incomeTax + surtax + social;
-  return (totalTax / grossIncome) * 100;
+  return {
+    incomeTax: incomeTax + surtax,
+    social,
+    net: grossIncome - totalTax,
+    effectiveRate: (totalTax / grossIncome) * 100
+  };
+}
+
+function computeEffectiveRate(country, grossIncome) {
+  return computeBreakdown(country, grossIncome).effectiveRate;
 }
 
 async function init() {
@@ -278,6 +299,28 @@ async function init() {
     Plotly.relayout('chart', { showlegend: legendShown });
   });
 
+  // Table update
+  const fmt = v => v.toLocaleString('en', { maximumFractionDigits: 0 });
+  const tbody = document.querySelector('#salaryTable tbody');
+  const tableLabel = document.getElementById('tableIncome');
+
+  function updateTable(grossIncome) {
+    tableLabel.textContent = fmt(grossIncome);
+    const rows = countries.map(c => {
+      const b = computeBreakdown(c, grossIncome);
+      return { code: c.code, name: c.name, ...b };
+    }).sort((a, b) => b.net - a.net);
+
+    tbody.innerHTML = rows.map(r => `<tr>
+      <td>${r.code} ${r.name}</td>
+      <td>${fmt(r.net + r.incomeTax + r.social)}</td>
+      <td>${fmt(r.incomeTax)}</td>
+      <td>${fmt(r.social)}</td>
+      <td><strong>${fmt(r.net)}</strong></td>
+      <td>${r.effectiveRate.toFixed(1)}%</td>
+    </tr>`).join('');
+  }
+
   // Max income slider + box (synced)
   const slider = document.getElementById('maxIncome');
   const box = document.getElementById('maxIncomeBox');
@@ -286,9 +329,12 @@ async function init() {
     slider.value = val;
     box.value = val;
     Plotly.relayout('chart', { 'xaxis.range': [0, val] });
+    updateTable(val);
   }
   slider.addEventListener('input', () => setMaxIncome(+slider.value));
   box.addEventListener('change', () => setMaxIncome(+box.value));
+
+  updateTable(500000);
 
   // Region filter buttons
   document.querySelectorAll('#regionControls button[data-region]').forEach(btn => {
