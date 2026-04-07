@@ -93,7 +93,7 @@
     <button id="legendToggle">Legend</button>
     <label style="display:flex;align-items:center;gap:6px;margin-left:auto;font-size:0.85rem;">
       Max income:
-      <input id="maxIncome" type="range" min="50000" max="1000000" step="50000" value="500000" style="width:120px;">
+      <input id="maxIncome" type="range" min="50000" max="10000000" step="50000" value="500000" style="width:120px;">
       <span id="maxIncomeLabel">500k</span>
     </label>
   </div>
@@ -210,9 +210,10 @@ async function init() {
   const data = await resp.json();
   const countries = data.countries;
 
-  // Income range: 1k to 500k, step 1k
+  // Income range: 1k to 10M (1k steps to 500k, 5k steps to 10M)
   const incomes = [];
   for (let i = 1000; i <= 500000; i += 1000) incomes.push(i);
+  for (let i = 505000; i <= 10000000; i += 5000) incomes.push(i);
 
   const traces = countries.map((c, i) => {
     const rates = incomes.map(inc => computeEffectiveRate(c, inc));
