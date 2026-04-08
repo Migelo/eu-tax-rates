@@ -11,20 +11,21 @@
       "name": "Austria",
       "incomeTax": {
         "brackets": [
-          { "upTo": 12816, "rate": 0.0 },
-          { "upTo": 20818, "rate": 0.20 },
-          { "upTo": 34513, "rate": 0.30 },
-          { "upTo": 66612, "rate": 0.40 },
-          { "upTo": 99266, "rate": 0.48 },
+          { "upTo": 13539, "rate": 0.0 },
+          { "upTo": 21992, "rate": 0.20 },
+          { "upTo": 36458, "rate": 0.30 },
+          { "upTo": 70365, "rate": 0.40 },
+          { "upTo": 104859, "rate": 0.48 },
           { "upTo": 1000000, "rate": 0.50 },
           { "upTo": null, "rate": 0.55 }
         ]
       },
       "standardDeduction": 132,
       "socialContributions": [
-        { "name": "Pension", "rate": 0.1025, "cap": 83160 },
-        { "name": "Health", "rate": 0.0387, "cap": 83160 },
-        { "name": "Unemployment", "rate": 0.03, "cap": 83160 }
+        { "name": "Pension", "rate": 0.1025, "cap": 97020 },
+        { "name": "Health", "rate": 0.0387, "cap": 97020 },
+        { "name": "Unemployment", "rate": 0.0295, "cap": 97020 },
+        { "name": "Miscellaneous (AK + Housing)", "rate": 0.01, "cap": 97020 }
       ],
       "socialContributionsDeductible": true
     },
@@ -80,22 +81,22 @@
       "standardDeduction": 0,
       "socialContributions": [
         { "name": "Social Insurance", "rate": 0.088, "cap": 66612 },
-        { "name": "GHS/GESY (National Health)", "rate": 0.0265, "cap": 180000 }
+        { "name": "GHS/GESY", "rate": 0.0265, "cap": 180000 }
       ],
-      "socialContributionsDeductible": false
+      "socialContributionsDeductible": true
     },
     {
       "code": "CZ",
       "name": "Czech Republic",
       "incomeTax": {
         "brackets": [
-          { "upTo": 59640, "rate": 0.15 },
+          { "upTo": 70513, "rate": 0.15 },
           { "upTo": null, "rate": 0.23 }
         ]
       },
-      "standardDeduction": 1068,
+      "standardDeduction": 1234,
       "socialContributions": [
-        { "name": "Social Insurance", "rate": 0.071, "cap": 95870 },
+        { "name": "Social Insurance", "rate": 0.071, "cap": 94017 },
         { "name": "Health Insurance", "rate": 0.045, "cap": null }
       ],
       "socialContributionsDeductible": false
@@ -105,9 +106,8 @@
       "name": "Germany",
       "incomeTax": {
         "brackets": [
-          { "upTo": 12084, "rate": 0.0 },
-          { "upTo": 17443, "rate": 0.14, "progressiveTo": 0.2397 },
-          { "upTo": 68480, "rate": 0.2397, "progressiveTo": 0.42 },
+          { "upTo": 12348, "rate": 0.0 },
+          { "upTo": 68430, "rate": 0.14, "progressiveTo": 0.42 },
           { "upTo": 277826, "rate": 0.42 },
           { "upTo": null, "rate": 0.45 }
         ],
@@ -115,10 +115,10 @@
       },
       "standardDeduction": 1230,
       "socialContributions": [
-        { "name": "Pension", "rate": 0.093, "cap": 96600 },
-        { "name": "Health (incl. supplementary)", "rate": 0.0815, "cap": 66150 },
-        { "name": "Unemployment", "rate": 0.013, "cap": 96600 },
-        { "name": "Long-term care", "rate": 0.023, "cap": 66150 }
+        { "name": "Pension", "rate": 0.093, "cap": 101400 },
+        { "name": "Health (incl. supplementary)", "rate": 0.0875, "cap": 69750 },
+        { "name": "Unemployment", "rate": 0.013, "cap": 101400 },
+        { "name": "Long-term care", "rate": 0.021, "cap": 69750 }
       ],
       "socialContributionsDeductible": true
     },
@@ -127,9 +127,10 @@
       "name": "Denmark",
       "incomeTax": {
         "brackets": [
-          { "upTo": 7028, "rate": 0.0 },
-          { "upTo": 76820, "rate": 0.37 },
-          { "upTo": null, "rate": 0.52 }
+          { "upTo": 6400, "rate": 0.0 },
+          { "upTo": 93300, "rate": 0.37 },
+          { "upTo": 377300, "rate": 0.445 },
+          { "upTo": null, "rate": 0.495 }
         ]
       },
       "standardDeduction": 0,
@@ -169,9 +170,7 @@
       },
       "standardDeduction": 0,
       "socialContributions": [
-        { "name": "Common contingencies", "rate": 0.0483, "cap": 59352 },
-        { "name": "Unemployment", "rate": 0.0158, "cap": 59352 },
-        { "name": "Training", "rate": 0.001, "cap": 59352 }
+        { "name": "Social Security (TGSS)", "rate": 0.0648, "cap": 61214 }
       ],
       "socialContributionsDeductible": true
     },
@@ -233,19 +232,16 @@
       "incomeTax": {
         "brackets": [
           { "upTo": 10000, "rate": 0.09 },
-          { "upTo": 20000, "rate": 0.22 },
-          { "upTo": 30000, "rate": 0.28 },
-          { "upTo": 40000, "rate": 0.36 },
+          { "upTo": 20000, "rate": 0.20 },
+          { "upTo": 30000, "rate": 0.26 },
+          { "upTo": 40000, "rate": 0.34 },
+          { "upTo": 60000, "rate": 0.39 },
           { "upTo": null, "rate": 0.44 }
         ]
       },
       "standardDeduction": 0,
       "socialContributions": [
-        { "name": "Pension", "rate": 0.0667, "cap": 93144 },
-        { "name": "Health", "rate": 0.0215, "cap": 93144 },
-        { "name": "Supplementary", "rate": 0.0325, "cap": 93144 },
-        { "name": "Unemployment", "rate": 0.012, "cap": 93144 },
-        { "name": "Other", "rate": 0.006, "cap": 93144 }
+        { "name": "EFKA (social security)", "rate": 0.1387, "cap": 93143 }
       ],
       "socialContributionsDeductible": false
     },
@@ -254,15 +250,14 @@
       "name": "Croatia",
       "incomeTax": {
         "brackets": [
-          { "upTo": 5400, "rate": 0.0 },
-          { "upTo": 50400, "rate": 0.20 },
+          { "upTo": 60000, "rate": 0.20 },
           { "upTo": null, "rate": 0.30 }
         ]
       },
-      "standardDeduction": 0,
+      "standardDeduction": 7200,
       "socialContributions": [
-        { "name": "Pension Pillar I", "rate": 0.15, "cap": 83496 },
-        { "name": "Pension Pillar II", "rate": 0.05, "cap": 83496 }
+        { "name": "Pension Pillar I", "rate": 0.15, "cap": 143496 },
+        { "name": "Pension Pillar II", "rate": 0.05, "cap": 143496 }
       ],
       "socialContributionsDeductible": true
     },
@@ -305,14 +300,14 @@
       "incomeTax": {
         "brackets": [
           { "upTo": 28000, "rate": 0.23 },
-          { "upTo": 50000, "rate": 0.35 },
+          { "upTo": 50000, "rate": 0.33 },
           { "upTo": null, "rate": 0.43 }
         ],
         "surchargeOnTax": 0.03
       },
       "standardDeduction": 1955,
       "socialContributions": [
-        { "name": "INPS", "rate": 0.0949, "cap": 120607 }
+        { "name": "INPS", "rate": 0.0919, "cap": 120607 }
       ],
       "socialContributionsDeductible": true
     },
@@ -321,16 +316,15 @@
       "name": "Lithuania",
       "incomeTax": {
         "brackets": [
-          { "upTo": 126532, "rate": 0.20 },
+          { "upTo": 82962, "rate": 0.20 },
+          { "upTo": 138270, "rate": 0.25 },
           { "upTo": null, "rate": 0.32 }
         ]
       },
       "standardDeduction": 0,
       "socialContributions": [
-        { "name": "Pension", "rate": 0.0872, "cap": 126532 },
-        { "name": "Health", "rate": 0.0698, "cap": null },
-        { "name": "Sickness", "rate": 0.0209, "cap": null },
-        { "name": "Unemployment", "rate": 0.0094, "cap": null }
+        { "name": "Social Insurance (SSI)", "rate": 0.1252, "cap": 126353 },
+        { "name": "Health Insurance", "rate": 0.0698, "cap": null }
       ],
       "socialContributionsDeductible": false
     },
@@ -339,14 +333,14 @@
       "name": "Luxembourg",
       "incomeTax": {
         "brackets": [
-          { "upTo": 12438, "rate": 0.0 },
+          { "upTo": 13230, "rate": 0.0 },
           { "upTo": 15081, "rate": 0.08 },
           { "upTo": 30390, "rate": 0.14 },
           { "upTo": 45630, "rate": 0.22 },
           { "upTo": 66162, "rate": 0.32 },
           { "upTo": 99498, "rate": 0.38 },
-          { "upTo": 132564, "rate": 0.40 },
-          { "upTo": 220788, "rate": 0.42 },
+          { "upTo": 150000, "rate": 0.40 },
+          { "upTo": 234871, "rate": 0.42 },
           { "upTo": null, "rate": 0.42 }
         ],
         "surchargeOnTax": 0.09
@@ -364,14 +358,14 @@
       "name": "Latvia",
       "incomeTax": {
         "brackets": [
-          { "upTo": 20004, "rate": 0.20 },
-          { "upTo": 78100, "rate": 0.23 },
-          { "upTo": null, "rate": 0.31 }
+          { "upTo": 105300, "rate": 0.255 },
+          { "upTo": 200000, "rate": 0.33 },
+          { "upTo": null, "rate": 0.36 }
         ]
       },
-      "standardDeduction": 0,
+      "standardDeduction": 6600,
       "socialContributions": [
-        { "name": "Social Insurance", "rate": 0.105, "cap": null }
+        { "name": "Social Insurance (NSIC)", "rate": 0.105, "cap": 105300 }
       ],
       "socialContributionsDeductible": true
     },
@@ -478,8 +472,8 @@
       "incomeTax": {
         "brackets": [
           { "upTo": 2400, "rate": 0.0 },
-          { "upTo": 63500, "rate": 0.32 },
-          { "upTo": null, "rate": 0.52 }
+          { "upTo": 58464, "rate": 0.3238 },
+          { "upTo": null, "rate": 0.5238 }
         ]
       },
       "standardDeduction": 0,
@@ -513,17 +507,16 @@
       "name": "Slovakia",
       "incomeTax": {
         "brackets": [
-          { "upTo": 47537, "rate": 0.19 },
-          { "upTo": null, "rate": 0.25 }
+          { "upTo": 43983, "rate": 0.19 },
+          { "upTo": 60349, "rate": 0.25 },
+          { "upTo": 75010, "rate": 0.30 },
+          { "upTo": null, "rate": 0.35 }
         ]
       },
       "standardDeduction": 5646,
       "socialContributions": [
-        { "name": "Pension", "rate": 0.04, "cap": 96600 },
-        { "name": "Disability", "rate": 0.03, "cap": 96600 },
-        { "name": "Sickness", "rate": 0.014, "cap": 96600 },
-        { "name": "Unemployment", "rate": 0.01, "cap": 96600 },
-        { "name": "Health", "rate": 0.04, "cap": null }
+        { "name": "Social Insurance", "rate": 0.094, "cap": 201168 },
+        { "name": "Health Insurance", "rate": 0.05, "cap": null }
       ],
       "socialContributionsDeductible": true
     }
