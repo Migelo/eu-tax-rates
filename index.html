@@ -64,7 +64,9 @@
   #chart { width: 100%; min-height: 600px; }
   #salaryTable { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
   #salaryTable th, #salaryTable td { padding: 6px 12px; text-align: right; border-bottom: 1px solid #eee; }
-  #salaryTable th { font-weight: 600; color: #555; position: sticky; top: 0; background: #fff; }
+  #salaryTable th { font-weight: 600; color: #555; position: sticky; top: 0; background: #fff; cursor: pointer; user-select: none; }
+  #salaryTable th:hover { color: #1a1a2e; }
+  #salaryTable th .sort-arrow { font-size: 0.7rem; margin-left: 2px; }
   #salaryTable td:first-child, #salaryTable th:first-child { text-align: left; }
   #salaryTable tbody tr:hover { background: #f5f6f8; }
   .methodology {
@@ -113,12 +115,12 @@
       <table id="salaryTable">
         <thead>
           <tr>
-            <th>Country</th>
-            <th>Gross</th>
-            <th>Income Tax</th>
-            <th>Social Contrib.</th>
-            <th>Net Salary</th>
-            <th>Effective Rate</th>
+            <th data-col="name">Country</th>
+            <th data-col="gross">Gross</th>
+            <th data-col="incomeTax">Income Tax</th>
+            <th data-col="social">Social Contrib.</th>
+            <th data-col="net">Net Salary</th>
+            <th data-col="effectiveRate">Effective Rate</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -299,27 +301,51 @@ async function init() {
     Plotly.relayout('chart', { showlegend: legendShown });
   });
 
-  // Table update
+  // Table update with sorting
   const fmt = v => v.toLocaleString('en', { maximumFractionDigits: 0 });
   const tbody = document.querySelector('#salaryTable tbody');
   const tableLabel = document.getElementById('tableIncome');
+  let sortCol = 'net', sortAsc = false;
+  let lastRows = [];
 
-  function updateTable(grossIncome) {
-    tableLabel.textContent = fmt(grossIncome);
-    const rows = countries.map(c => {
-      const b = computeBreakdown(c, grossIncome);
-      return { code: c.code, name: c.name, ...b };
-    }).sort((a, b) => b.net - a.net);
-
-    tbody.innerHTML = rows.map(r => `<tr>
+  function renderRows() {
+    const sorted = [...lastRows].sort((a, b) => {
+      const av = sortCol === 'name' ? a.code + ' ' + a.name : a[sortCol];
+      const bv = sortCol === 'name' ? b.code + ' ' + b.name : b[sortCol];
+      if (av < bv) return sortAsc ? -1 : 1;
+      if (av > bv) return sortAsc ? 1 : -1;
+      return 0;
+    });
+    tbody.innerHTML = sorted.map(r => `<tr>
       <td>${r.code} ${r.name}</td>
-      <td>${fmt(r.net + r.incomeTax + r.social)}</td>
+      <td>${fmt(r.gross)}</td>
       <td>${fmt(r.incomeTax)}</td>
       <td>${fmt(r.social)}</td>
       <td><strong>${fmt(r.net)}</strong></td>
       <td>${r.effectiveRate.toFixed(1)}%</td>
     </tr>`).join('');
+    document.querySelectorAll('#salaryTable th').forEach(th => {
+      const arrow = th.dataset.col === sortCol ? (sortAsc ? ' \u25B2' : ' \u25BC') : '';
+      th.textContent = th.textContent.replace(/ [\u25B2\u25BC]$/, '') + arrow;
+    });
   }
+
+  function updateTable(grossIncome) {
+    tableLabel.textContent = fmt(grossIncome);
+    lastRows = countries.map(c => {
+      const b = computeBreakdown(c, grossIncome);
+      return { code: c.code, name: c.name, gross: grossIncome, ...b };
+    });
+    renderRows();
+  }
+
+  document.querySelectorAll('#salaryTable th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (sortCol === col) { sortAsc = !sortAsc; } else { sortCol = col; sortAsc = col === 'name'; }
+      renderRows();
+    });
+  });
 
   // Max income slider + box (synced)
   const slider = document.getElementById('maxIncome');
